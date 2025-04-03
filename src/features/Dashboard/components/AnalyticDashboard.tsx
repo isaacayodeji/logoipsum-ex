@@ -1,8 +1,20 @@
+"use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useEffect, useState } from "react"
 import { Bar, Doughnut } from "react-chartjs-2"
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement } from "chart.js"
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+  type ChartData,
+  type ChartOptions,
+} from "chart.js"
 
 // Register ChartJS components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement)
@@ -17,19 +29,28 @@ export function AnalyticsDashboard() {
 
   if (!mounted) return null
 
+  // Define colors for consistent use
+  const colors = [
+    "#1f2937", // dark gray
+    "#a7f3d0", // green
+    "#93c5fd", // blue
+    "#cbd5e1", // light gray
+    "#818cf8", // purple
+  ]
+
   // Reports Generated data
-  const reportsData = {
+  const reportsData: ChartData<"bar"> = {
     labels: ["Linux", "Mac", "iOS", "Windows", "Android", "Other"],
     datasets: [
       {
         data: [13000, 25000, 18000, 30000, 10000, 22000],
         backgroundColor: [
-          "#818cf8", // Linux - purple
-          "#a7f3d0", // Mac - green
-          "#1f2937", // iOS - black
-          "#93c5fd", // Windows - blue
-          "#cbd5e1", // Android - gray
-          "#a7f3d0", // Other - green
+          colors[4], // Linux - purple
+          colors[1], // Mac - green
+          colors[0], // iOS - black
+          colors[2], // Windows - blue
+          colors[3], // Android - gray
+          colors[1], // Other - green
         ],
         borderRadius: 8,
         borderWidth: 0,
@@ -37,43 +58,56 @@ export function AnalyticsDashboard() {
     ],
   }
 
-  // Traffic by Location data
-  const trafficData = {
-    labels: ["Nigeria", "Ghana", "Kenya", "Benin Republic"],
+  // Traffic by Location data with explicit color array
+//   const locationColors = [colors[0], colors[1], colors[2], colors[3]]
+//   const trafficData: ChartData<"doughnut"> = {
+//     labels: ["Nigeria", "Ghana", "Kenya", "Benin Republic"],
+//     datasets: [
+//       {
+//         data: [38.6, 22.5, 30.8, 8.1],
+//         backgroundColor: locationColors,
+//         borderWidth: 0,
+//         // cutout: "70%",
+//       },
+//     ],
+//   }
+const locationData = [
+    { label: "Nigeria", value: 38.6, color: colors[0] },
+    { label: "Ghana", value: 22.5, color: colors[1] },
+    { label: "Kenya", value: 30.8, color: colors[2] },
+    { label: "Benin Republic", value: 8.1, color: colors[3] },
+  ]
+  const trafficData: ChartData<"doughnut"> = {
+    labels: locationData.map((item) => item.label),
     datasets: [
       {
-        data: [38.6, 22.5, 30.8, 8.1],
-        backgroundColor: [
-          "#1f2937", // Nigeria - dark gray
-          "#a7f3d0", // Ghana - green
-          "#93c5fd", // Kenya - blue
-          "#cbd5e1", // Benin - light gray
-        ],
+        data: locationData.map((item) => item.value),
+        backgroundColor: locationData.map((item) => item.color),
         borderWidth: 0,
-        cutout: "70%",
+        // cutout: "70%",
       },
     ],
   }
 
   // Marketing & SEO data
-  const marketingData = {
+  const marketingData: ChartData<"bar"> = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     datasets: [
       {
         data: [13000, 25000, 18000, 28000, 10000, 22000, 13000, 25000, 18000, 30000, 10000, 22000],
         backgroundColor: [
-          "#818cf8", // Jan - purple
-          "#a7f3d0", // Feb - green
-          "#1f2937", // Mar - black
-          "#93c5fd", // Apr - blue
-          "#cbd5e1", // May - gray
-          "#a7f3d0", // Jun - green
-          "#818cf8", // Jul - purple
-          "#a7f3d0", // Aug - green
-          "#1f2937", // Sep - black
-          "#93c5fd", // Oct - blue
-          "#cbd5e1", // Nov - gray
-          "#a7f3d0", // Dec - green
+          colors[4], // Jan - purple
+          colors[1], // Feb - green
+          colors[0], // Mar - black
+          colors[2], // Apr - blue
+          colors[3], // May - gray
+          colors[1], // Jun - green
+          colors[4], // Jul - purple
+          colors[1], // Aug - green
+          colors[0], // Sep - black
+          colors[2], // Oct - blue
+          colors[3], // Nov - gray
+          colors[1], // Dec - green
         ],
         borderRadius: 8,
         borderWidth: 0,
@@ -82,7 +116,7 @@ export function AnalyticsDashboard() {
   }
 
   // Chart options
-  const barOptions = {
+  const barOptions: ChartOptions<"bar"> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -98,7 +132,7 @@ export function AnalyticsDashboard() {
         padding: 12,
         displayColors: false,
         callbacks: {
-          label: (context: { formattedValue: unknown }) => `${context.formattedValue}K`,
+          label: (context) => `${context.formattedValue}K`,
         },
       },
     },
@@ -113,7 +147,8 @@ export function AnalyticsDashboard() {
         },
         ticks: {
           color: "#6b7280",
-          callback: (value: number) => value / 1000 + "K",
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          callback: (value :any ) => value / 1000 + "K",
         },
       },
       x: {
@@ -130,7 +165,7 @@ export function AnalyticsDashboard() {
     },
   }
 
-  const doughnutOptions = {
+  const doughnutOptions: ChartOptions<"doughnut"> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -146,7 +181,7 @@ export function AnalyticsDashboard() {
         padding: 12,
         displayColors: false,
         callbacks: {
-          label: (context: { label: undefined; formattedValue: number }) => `${context.label}: ${context.formattedValue}%`,
+          label: (context) => `${context.label}: ${context.formattedValue}%`,
         },
       },
     },
@@ -170,22 +205,19 @@ export function AnalyticsDashboard() {
           <CardTitle className="text-base font-medium">Traffic by Location</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col md:flex-row items-center md:gap-10 justify-between h-[250px]">
+        <div className="flex flex-col md:flex-row items-center md:gap-10 justify-between h-[250px]">
             <div className="w-full md:w-1/2 h-full">
               <Doughnut data={trafficData} options={doughnutOptions} />
             </div>
             <div className="w-full md:w-1/2 mt-4 md:mt-0">
               <div className="space-y-2">
-                {trafficData.labels.map((label, index) => (
+                {locationData.map((item, index) => (
                   <div key={index} className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <span
-                        className="w-3 h-3 rounded-full mr-2"
-                        style={{ backgroundColor: trafficData.datasets[0].backgroundColor[index] }}
-                      ></span>
-                      <span className="text-sm">{label}</span>
+                      <span className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: item.color }}></span>
+                      <span className="text-sm">{item.label}</span>
                     </div>
-                    <span className="text-sm font-medium">{trafficData.datasets[0].data[index]}%</span>
+                    <span className="text-sm font-medium">{item.value}%</span>
                   </div>
                 ))}
               </div>

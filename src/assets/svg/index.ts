@@ -1,0 +1,19 @@
+export { default as Logo } from "./logo.svg";
+export { default as Avatar } from "./avatar.svg";
+export { default as KYCIcon } from "./kyc.svg";
+export { default as ReportIcon } from "./reports.svg";
+export { default as AuditIcon } from "./audit.svg";
+export { default as UserIcon } from "./user.svg";
+export { default as AdminIcon } from "./admin.svg";
+export { default as SunIcon } from "./sun.svg";
+export { default as TimerIcon } from "./timer.svg";
+export { default as BellIcon } from "./bell.svg";
+export { default as LogOutIcon } from "./logout.svg";
+export { default as BugIcon } from "./bug.svg";
+export { default as SubscribeIcon } from "./subscribe.svg";
+export { default as PersonIcon } from "./user_img1.svg";
+export { default as Person2Icon } from "./user_img2.svg";
+export { default as Person3Icon } from "./user_img3.svg";
+export { default as StatUpIcon } from "./stat_up.svg";
+export { default as StatDownIcon } from "./stat_down.svg";
+
